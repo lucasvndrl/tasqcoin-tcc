@@ -20,6 +20,9 @@ class User {
   balance: number;
 
   @Column()
+  dark_balance: number;
+
+  @Column()
   is_admin: boolean;
 
   @Column()
@@ -46,6 +49,7 @@ class User {
   constructor() {
     if (!this.id) this.id = uuidV4();
     if (!this.balance) this.balance = 1000;
+    if (!this.dark_balance) this.dark_balance = 50;
   }
 }
 

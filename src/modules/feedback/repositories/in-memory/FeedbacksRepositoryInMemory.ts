@@ -58,14 +58,17 @@ class FeedbacksRepositoryInMemory implements IFeedbacksRepository {
   async getUserBalance(
     user_id: string,
     start_date: Date,
-    end_date: Date
+    end_date: Date,
+    is_dark = false
   ): Promise<number> {
+    console.log('is_dark', is_dark, typeof is_dark);
     return this.feedbacks
       .filter(
         (feedback) =>
           feedback.user_to_id === user_id &&
           feedback.created_at.getTime() > start_date.getTime() &&
-          feedback.created_at.getTime() < end_date.getTime()
+          feedback.created_at.getTime() < end_date.getTime() &&
+          feedback.is_dark === is_dark
       )
       .reduce((total, currentFeedback) => total + currentFeedback.amount, 0);
   }

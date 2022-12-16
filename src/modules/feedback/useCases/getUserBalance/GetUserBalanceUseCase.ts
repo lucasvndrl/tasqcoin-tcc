@@ -16,7 +16,10 @@ class GetUserBalanceUseCase {
     private dateProvider: IDateProvider
   ) {}
 
-  async execute(user_id: string): Promise<number> {
+  async execute(user_id: string): Promise<{
+    balance: number;
+    dark_balance: number;
+  }> {
     const user = await this.usersRepository.findById(user_id).catch(() => {
       throw new AppError('User not found!');
     });
@@ -28,7 +31,15 @@ class GetUserBalanceUseCase {
       this.dateProvider.startOfMonth(),
       this.dateProvider.endOfMonth()
     );
-    return balance;
+
+    const dark_balance = await this.feedbackRepository.getUserBalance(
+      user_id,
+      this.dateProvider.startOfMonth(),
+      this.dateProvider.endOfMonth(),
+      true
+    );
+
+    return { balance, dark_balance };
   }
 }
 

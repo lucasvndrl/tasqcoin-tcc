@@ -12,6 +12,7 @@ interface IRequest {
   description: string;
   user_from_id: string;
   user_to_id: string;
+  is_dark?: boolean;
 }
 
 @injectable()
@@ -28,13 +29,15 @@ class CreateFeedbackUseCase {
     description,
     user_from_id,
     user_to_id,
+    is_dark = false,
   }: IRequest): Promise<Feedback> {
     const user_from = await this.usersRepository.findById(user_from_id);
 
     if (!user_from) throw new AppError('User not found!');
 
-    if (user_from.balance < amount)
-      throw new AppError('User balance is too low!');
+    const balance = is_dark ? user_from.dark_balance : user_from.balance;
+
+    if (balance < amount) throw new AppError('User balance is too low!');
 
     const user_to = await this.usersRepository
       .findById(user_to_id)
@@ -51,12 +54,16 @@ class CreateFeedbackUseCase {
       description,
       user_from_id: user_from.id,
       user_to_id,
+      is_dark,
     });
 
     await this.usersRepository.update(
       plainToInstance(User, {
         ...user_from,
-        balance: user_from.balance - amount,
+        balance: is_dark ? user_from.balance : user_from.balance - amount,
+        dark_balance: is_dark
+          ? user_from.dark_balance - amount
+          : user_from.dark_balance,
       })
     );
 

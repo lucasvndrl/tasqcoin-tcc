@@ -10,6 +10,7 @@ class UserMap {
     id,
     name,
     balance,
+    dark_balance,
   }: User): IUserResponseDTO {
     const user = instanceToInstance({
       avatar,
@@ -17,6 +18,7 @@ class UserMap {
       id,
       name,
       balance,
+      dark_balance,
     });
     return user;
   }

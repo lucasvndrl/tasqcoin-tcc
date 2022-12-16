@@ -14,7 +14,8 @@ interface IFeedbacksRepository {
   getUserBalance(
     user_id: string,
     start_date: Date,
-    end_date: Date
+    end_date: Date,
+    is_dark?: boolean
   ): Promise<number>;
   getUsersRanking(
     start_date: Date,

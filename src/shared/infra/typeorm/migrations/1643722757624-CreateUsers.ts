@@ -28,6 +28,10 @@ export class CreateUsers1643722757624 implements MigrationInterface {
             type: 'numeric',
           },
           {
+            name: 'dark_balance',
+            type: 'numeric',
+          },
+          {
             name: 'is_admin',
             type: 'boolean',
             default: false,

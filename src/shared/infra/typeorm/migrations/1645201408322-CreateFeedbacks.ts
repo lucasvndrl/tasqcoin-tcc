@@ -30,6 +30,10 @@ export class CreateFeedbacks1645201408322 implements MigrationInterface {
             isNullable: true,
           },
           {
+            name: 'is_dark',
+            type: 'boolean',
+          },
+          {
             name: 'created_at',
             type: 'timestamp',
             default: 'now()',

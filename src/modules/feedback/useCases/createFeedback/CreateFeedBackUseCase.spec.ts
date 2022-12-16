@@ -46,6 +46,21 @@ describe('CreateFeedbackUseCase', () => {
     expect(feedback.user_to_id).toEqual(userTo.id);
   });
 
+  it('Should be able to create a new negative feedback', async () => {
+    const feedback = await createFeedbackUseCase.execute({
+      amount: 25,
+      description: 'description',
+      user_from_id: userFrom.id,
+      user_to_id: userTo.id,
+      is_dark: true,
+    });
+
+    expect(feedback).toHaveProperty('id');
+    expect(feedback.user_from_id).toEqual(userFrom.id);
+    expect(feedback.user_to_id).toEqual(userTo.id);
+    expect(feedback.is_dark).toEqual(true);
+  });
+
   it('Should not be able to create a new feedback with unexistent user', async () => {
     await expect(
       createFeedbackUseCase.execute({
@@ -73,6 +88,18 @@ describe('CreateFeedbackUseCase', () => {
         description: 'description',
         user_from_id: userFrom.id,
         user_to_id: userTo.id,
+      })
+    ).rejects.toEqual(new AppError('User balance is too low!'));
+  });
+
+  it('Should not be able to create a new negative feedback with not enough dark balance', async () => {
+    await expect(
+      createFeedbackUseCase.execute({
+        amount: 75,
+        description: 'description',
+        user_from_id: userFrom.id,
+        user_to_id: userTo.id,
+        is_dark: true,
       })
     ).rejects.toEqual(new AppError('User balance is too low!'));
   });

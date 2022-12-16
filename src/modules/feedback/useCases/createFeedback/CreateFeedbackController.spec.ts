@@ -57,6 +57,21 @@ describe('Create Feedback Controller', () => {
     expect(response.status).toBe(201);
   });
 
+  it.only('Should be able to create a new negative feedback', async () => {
+    const response = await request(app)
+      .post('/feedbacks')
+      .set({
+        Authorization: `Bearer ${userFromToken}`,
+      })
+      .send({
+        amount: 25,
+        description: 'description',
+        user_to_id: userTo.id,
+        is_dark: true,
+      });
+    expect(response.status).toBe(201);
+  });
+
   it('Should not be able to create a new feedback with insufficient balance', async () => {
     const response = await request(app)
       .post('/feedbacks')

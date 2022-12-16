@@ -53,12 +53,14 @@ class FeedbacksRepository implements IFeedbacksRepository {
   async getUserBalance(
     user_id: string,
     start_date: Date,
-    end_date: Date
+    end_date: Date,
+    is_dark = false
   ): Promise<number> {
     const [{ sum }] = await this.repository
       .createQueryBuilder('f')
       .select('SUM(f.amount)', 'sum')
       .andWhere('f.user_to_id = :id', { id: user_id })
+      .andWhere('f.is_dark = :is_dark', { is_dark })
       .andWhere('f.created_at BETWEEN :start AND :end', {
         start: start_date,
         end: end_date,

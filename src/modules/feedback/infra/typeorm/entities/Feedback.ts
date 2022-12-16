@@ -35,6 +35,9 @@ class Feedback {
   @Column()
   user_to_id: string;
 
+  @Column()
+  is_dark: boolean;
+
   @CreateDateColumn()
   created_at: Date;
 

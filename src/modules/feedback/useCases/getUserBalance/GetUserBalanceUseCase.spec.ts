@@ -37,15 +37,23 @@ describe('GetUserBalanceUseCase', () => {
           description: 'send',
           user_from_id: 'to_id',
           user_to_id: userTo.id,
+          is_dark: false,
         });
       })
     );
+    await feedbacksRepositoryInMemory.create({
+      amount: 100,
+      description: 'send',
+      user_from_id: 'to_id',
+      user_to_id: userTo.id,
+      is_dark: true,
+    });
   });
 
   it('Should be able to get user balance', async () => {
     const balance = await getUserBalanceUseCase.execute(userTo.id);
-
-    expect(balance).toBe(1200);
+    console.log(feedbacksRepositoryInMemory.feedbacks);
+    expect(balance).toMatchObject({ balance: 1200, dark_balance: 100 });
   });
 
   it('Should not be able to get balance from a inexistent user', async () => {
